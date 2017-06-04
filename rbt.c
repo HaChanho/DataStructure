@@ -41,7 +41,11 @@ RBTPtr rbt_alloc() {
 
 NodePtr tree_Search(RBTPtr self, NodePtr tree, int n){
 	if((tree == self->nil) || (n == tree->val))
+	{
+		if(tree == self->nil)
+			printf("%d is not found!\n", n);
 		return tree;
+	}
 	
 	if(n < tree->val)
 		return tree_Search(self, tree->left,n);
@@ -409,7 +413,7 @@ void main() {
 			rbt_inorder(rbt, rbt->root);
 			//rbt_print(rbt, rbt->root, 0);
 			RB_Destroy(rbt, rbt->root);
-			total = nb = bh = 0;
+			break;
 		}
 		else if(num > 0)
 			RB_insert(rbt, node_alloc(rbt, num));
