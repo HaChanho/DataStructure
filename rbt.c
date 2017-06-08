@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <dirent.h>
+#include <string.h>
 
 typedef struct Node* NodePtr;
 struct Node {
@@ -28,6 +31,9 @@ NodePtr node_alloc(RBTPtr tree, int newval) {
 
 int total = 0;			//The total number of Nodes
 int nb = 0;			//The number of Black Nodes
+int insert = 0;
+int delete = 0;
+int miss = 0;
 
 RBTPtr rbt_alloc() {
 	RBTPtr tree = (RBTPtr)malloc(sizeof(struct RBT));
@@ -177,6 +183,7 @@ void RB_insert(RBTPtr self, NodePtr n) {
 	n->right = self->nil;
 	n->color = 'R';
 	RB_insert_fixup(self, n);
+	insert++;
 } 
 
 NodePtr tree_Min(RBTPtr self, NodePtr n){
@@ -272,7 +279,10 @@ void RB_delete(RBTPtr self, NodePtr n){
 	char origincolor;
 
 	if(n == self->nil)
+	{
+		miss++;
 		return;
+	}
 	y = n;
 	origincolor = y->color;
 
@@ -307,6 +317,7 @@ void RB_delete(RBTPtr self, NodePtr n){
 	}
 	if(origincolor == 'B')
 		RB_delete_fixup(self,x);
+	delete++;
 
 }
 
@@ -315,7 +326,7 @@ void rbt_inorder(RBTPtr self, NodePtr tree) {
 		return;
 	else {
 		rbt_inorder(self, tree->left);
-		printf("%d\n", tree->val);
+		printf("%d %c\n", tree->val, tree->color);
 		rbt_inorder(self, tree->right);
 	}
 }
@@ -390,15 +401,37 @@ void RB_Destroy(RBTPtr self, NodePtr tree)
 void main() {
 
 	RBTPtr rbt = rbt_alloc();
+	char filename[50];
+	char file[100];
 
-	FILE* RBT;
+	DIR *dp;
+	struct dirent *ep;
+	dp = opendir("./input/");
+	FILE *RBT;
+
+	if(dp != NULL)
+	{
+		while(ep = readdir(dp))
+		{
+			if(strncmp(ep->d_name,".",1))
+				strcpy(filename,ep->d_name);
+		}	
+
+		(void)closedir(dp);
+	}
+	else
+		perror("Couldn't open the directory\n");
+		
 	int num;
 	int bh = 0;
 
-	RBT = fopen("input.txt", "rt");
+	strcpy(file, "./input/");
+	strcat(file, filename);
+
+	RBT = fopen(file, "rt");
 	if(RBT == NULL)
 	{
-		printf("error\n");
+		printf("Can't find input file!\n");
 		exit(0);
 	}
 
@@ -409,7 +442,13 @@ void main() {
 			rbt_total(rbt, rbt->root);
 			rbt_count_nb(rbt, rbt->root);
 			bh = rbt_count_bh(rbt);
-			printf("total = %d\nnb = %d\nbh = %d\n", total, nb, bh);
+			printf("filename = %s\n", filename);
+			printf("total = %d\n", total);
+			printf("insert = %d\n", insert);
+			printf("delete = %d\n", delete);
+			printf("miss = %d\n", miss);
+			printf("nb = %d\n", nb);
+			printf("bh = %d\n", bh);
 			rbt_inorder(rbt, rbt->root);
 			//rbt_print(rbt, rbt->root, 0);
 			RB_Destroy(rbt, rbt->root);
@@ -425,4 +464,5 @@ void main() {
 	}
 
 	fclose(RBT);
+
 }
