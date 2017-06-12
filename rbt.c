@@ -49,7 +49,10 @@ NodePtr tree_Search(RBTPtr self, NodePtr tree, int n){
 	if((tree == self->nil) || (n == tree->val))
 	{
 		if(tree == self->nil)
-			printf("%d is not found!\n", n);
+		{
+			//printf("%d is not found!\n", n);
+			return tree;
+		}
 		return tree;
 	}
 	
@@ -406,63 +409,65 @@ void main() {
 
 	DIR *dp;
 	struct dirent *ep;
-	dp = opendir("./input/");
+	dp = opendir("./rbtest/");
 	FILE *RBT;
 
-	if(dp != NULL)
+	if(dp == NULL)
 	{
-		while(ep = readdir(dp))
-		{
-			if(strncmp(ep->d_name,".",1))
-				strcpy(filename,ep->d_name);
-		}	
-
-		(void)closedir(dp);
+		printf("Couldn't open the directory\n");
+		exit(0);
 	}
-	else
-		perror("Couldn't open the directory\n");
+		
 		
 	int num;
 	int bh = 0;
 
-	strcpy(file, "./input/");
-	strcat(file, filename);
-
-	RBT = fopen(file, "rt");
-	if(RBT == NULL)
+	while(ep = readdir(dp))
 	{
-		printf("Can't find input file!\n");
-		exit(0);
-	}
+		strcpy(filename,ep->d_name);
+		strcpy(file, "./rbtest/");
+		strcat(file, filename);
 
-	while(fscanf(RBT, "%d", &num) != EOF)
-	{
-		if(num == 0)
+		RBT = fopen(file, "rt");
+		
+		if(RBT != NULL)
 		{
-			rbt_total(rbt, rbt->root);
-			rbt_count_nb(rbt, rbt->root);
-			bh = rbt_count_bh(rbt);
-			printf("filename = %s\n", filename);
-			printf("total = %d\n", total);
-			printf("insert = %d\n", insert);
-			printf("delete = %d\n", delete);
-			printf("miss = %d\n", miss);
-			printf("nb = %d\n", nb);
-			printf("bh = %d\n", bh);
-			rbt_inorder(rbt, rbt->root);
-			//rbt_print(rbt, rbt->root, 0);
-			RB_Destroy(rbt, rbt->root);
-			break;
+			while(fscanf(RBT, "%d", &num) != EOF)
+			{
+
+				if(num == 0)
+				{
+					rbt_total(rbt, rbt->root);
+					rbt_count_nb(rbt, rbt->root);
+					bh = rbt_count_bh(rbt);
+					printf("filename = %s\n", filename);
+					printf("total = %d\n", total);
+					printf("insert = %d\n", insert);
+					printf("delete = %d\n", delete);
+					printf("miss = %d\n", miss);
+					printf("nb = %d\n", nb);
+					printf("bh = %d\n", bh);
+					rbt_inorder(rbt, rbt->root);
+					//rbt_print(rbt, rbt->root, 0);
+					RB_Destroy(rbt, rbt->root);
+					total = 0;
+					bh = 0;
+					nb = 0;
+					insert = 0;
+					delete = 0;
+					miss = 0;
+					break;
+				}
+				else if(num > 0)
+					RB_insert(rbt, node_alloc(rbt, num));
+				else
+				{
+					num = num * (-1);
+					RB_delete(rbt, tree_Search(rbt, rbt->root,num));
+				}
+			}
 		}
-		else if(num > 0)
-			RB_insert(rbt, node_alloc(rbt, num));
-		else
-		{
-			num = num * (-1);
-			RB_delete(rbt, tree_Search(rbt, rbt->root,num));
-		}
+		fclose(RBT);
 	}
-
-	fclose(RBT);
-
+	(void)closedir(dp);
 }
