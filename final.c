@@ -499,7 +499,7 @@ void main() {
 				{
 					if(num == 0)
 					{
-						rbt_print(rbt,rbt->root,0);
+						//rbt_print(rbt,rbt->root,0);
 						break;
 					}	
 					else if(num > 0)
@@ -557,7 +557,7 @@ void main() {
 							strcpy(suc,"NIL");
 						else
 							sprintf(suc, "%d", sucNode->val);
-						printf("%s %s %s\n", pre, mid, suc);
+						//printf("%s %s %s\n", pre, mid, suc);
 						fprintf(out,"%s %s %s\n", pre, mid, suc);
 					}	
 				}
