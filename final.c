@@ -466,7 +466,7 @@ void main() {
 
 	DIR *dp;
 	struct dirent *ep;
-	dp = opendir("./rbtest");
+	dp = opendir("./prjtest");
 	FILE *RBT, *out;
 
 	char pre[512], suc[512], mid[512];
@@ -486,10 +486,10 @@ void main() {
 	while(ep = readdir(dp))
 	{
 		strcpy(filename,ep->d_name);
-		strcpy(file, "./rbtest/");
+		strcpy(file, "./prjtest/");
 		strcat(file, filename);
 		
-		if(!strcmp(filename,"input.txt"))
+		if(!strcmp(filename,"test01.txt"))
 		{
 			RBT = fopen(file, "rt");
 		
@@ -499,7 +499,7 @@ void main() {
 				{
 					if(num == 0)
 					{
-						//rbt_print(rbt,rbt->root,0);
+						rbt_print(rbt,rbt->root,0);
 						break;
 					}	
 					else if(num > 0)
@@ -512,18 +512,19 @@ void main() {
 				}
 			}
 			fclose(RBT);
+			strcmp(filename,"search01.txt");
 		}
 
-		else if(!strcmp(filename,"search.txt"))
-		{
+		if(!strcmp(filename,"search01.txt"))
+		{		
 			RBT = fopen(file, "rt");
-			out = fopen("./rbtest/output.txt", "wt");
+			out = fopen("./prjtest/output01.txt", "wt");
 			if((RBT != NULL) && (out != NULL))
 			{
 				while(fscanf(RBT, "%d", &num) != EOF)
 				{
 					if(num == 0)
-						break;	
+						break;
 					else
 					{
 						fndNode = tree_find(rbt,rbt->root,num);
@@ -562,7 +563,6 @@ void main() {
 					}	
 				}
 			}
-	
 			fclose(RBT);
 			fclose(out);
 		}
