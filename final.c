@@ -499,7 +499,7 @@ void main() {
 				{
 					if(num == 0)
 					{
-						rbt_print(rbt,rbt->root,0);
+						//rbt_print(rbt,rbt->root,0);
 						break;
 					}	
 					else if(num > 0)
