@@ -519,7 +519,7 @@ void main() {
 		{		
 			RBT = fopen(file, "rt");
 			out = fopen("./prjtest/output01.txt", "wt");
-			if((RBT != NULL) && (out != NULL))
+			if((RBT != NULL) && (out != NULL) && (rbt->root != rbt->nil))
 			{
 				while(fscanf(RBT, "%d", &num) != EOF)
 				{
