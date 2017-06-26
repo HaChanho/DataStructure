@@ -512,7 +512,7 @@ void main() {
 				}
 			}
 			fclose(RBT);
-			strcmp(filename,"search01.txt");
+			strcpy(filename,"search01.txt");
 		}
 
 		if(!strcmp(filename,"search01.txt"))
